@@ -46,12 +46,13 @@ func printJson(i interface{}) {
 
 func main() {
 	var (
-		app, email, pass string
-		purch, verbose   bool
-		version          int
+		app, email, pass, proxy string
+		purch, verbose          bool
+		version                 int
 	)
 
 	flag.StringVar(&app, "a", "", "app")
+	flag.StringVar(&proxy, "proxy", "", "Proxy")
 	// flag.BoolVar(&dev, "d", false, "create device")
 	flag.StringVar(&email, "e", "", "email")
 	flag.StringVar(&pass, "p", "", "password")
@@ -65,6 +66,9 @@ func main() {
 	flag.BoolVar(&verbose, "verbose", false, "dump requests")
 	flag.Parse()
 	googleplay.Verbose = verbose
+	if proxy != "" {
+		os.Setenv("HTTP_PROXY", proxy)
+	}
 	switch {
 	case email != "":
 		token, err := token(email, pass)
